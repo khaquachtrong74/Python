@@ -1,15 +1,80 @@
 import numbers
 import collections
 import collections.abc
+from typing import override
 
 
 
 class Thing:
+    """
+        __repr__() dùng xác định cách các đối tượng được biểu diễn 
+        dưới dạng chuỗi 
+            - Gỡ lỗi, Ghi log, hiểu đầu ra 
+        -> Rõ ràng
+
+        __repr__ in Thing return class_name
+    """
+    def __repr__(self):
+        return '<{}>'.format(getattr(self, '__name__', self.__class__.__name__))
+    def __init__(self):
+        self.alive = False
+    def is_alive(self):
+        return hasattr(self, 'alive') and self.alive # return alive failse
+    def show_state(self):
+        print("Some thing I don't ever heared before")
+    def display(self, canvas, x, y, width, height):
+        pass
+class Food():
+    pass
+class Water():
     pass
 
-
+# Agent là một lớp con của Thing
 class Agent(Thing):
-    pass
+    # program is a class
+    # this program prameter is a Function
+    def __init__(self, program=None ):
+        self.alive = True
+        self.bump = False
+        self.holding = [ ]
+        self.performance = 0
+        # collections.abc-> Abstract Base Classes for Containers
+        if program is None or not isinstance(program, collections.abc.Callable):
+            print("Can't find a valid program for {}, falling back to default.".format(self.__class__.__name__))
+            # Override func program
+            def program(percept):
+                # x = 1 
+                # eval('x+1') >> 2
+                return eval(input('Percept={}; action?'.format(percept)))
+        self.program = program
+    
+    def can_grab(self, thing : Thing):
+        return False
+
+#SuperDog kế thừa Agent
+class SuperDog(Agent):
+    location = 1 
+    def movedown(self):
+        self.location += 1 
+
+    def eat(self, thing):
+        if isinstance(thing, Food):
+            return True
+        return False
+    def drink(self, thing):
+        if isinstance(thing, Water):
+            return True
+        return False
+def program(percepts):
+    # Return reaction from outside
+    for p in percepts:
+        if isinstance(p, Food):
+            return 'eat'
+        elif isinstance(p, Water):
+            return 'drink'
+    return 'move down'
+
+
 
 #----------------------------------------------------------------------------------------------------------------------#
 
@@ -35,7 +100,6 @@ class Environment:
     def percept(self, agent):
         """Return the percept that the agent sees at this point. (Implement this.)"""
         raise NotImplementedError
-
     def execute_action(self, agent, action):
         """Change the world to reflect this action. (Implement this.)"""
         raise NotImplementedError
@@ -43,9 +107,9 @@ class Environment:
     def default_location(self, thing):
         """Default location to place a new thing with unspecified location."""
         return None
-
+    # Ngoại sinh 
     def exogenous_change(self):
-        """If there is spontaneous change in the world, override this."""
+        """If there is spontaneous(Tự phát) change in the world, override this."""
         pass
 
     def is_done(self):
@@ -114,3 +178,43 @@ class Environment:
             print("  from list: {}".format([(thing, thing.location) for thing in self.things]))
         if thing in self.agents:
             self.agents.remove(thing)
+            
+
+class Park(Environment):
+    @override
+    def percept(self, agent):
+        things = self.list_things_at(agent.location)
+        return things
+    @override
+    def execute_action(self, agent, action):
+        if action == 'move_down':
+            agent.move_down()
+            print("BlindDog at: {}".format(agent.location))
+        if action == 'eat':
+            things = percept(agent)
+            agent.eat(this)
+        elif action == 'drink':
+            agent.drink()
+
+if __name__ == '__main__':
+   """
+    t = Thing()
+    a = Agent()
+    print(repr(t))
+    print(t.is_alive())
+    t.show_state()
+    print(repr(a))
+    print("TEST SUPPER DOG________________")
+    dogfood = Food()
+    wate = Water()
+    aka_dog = SuperDog(program)
+    print(aka_dog.program)"""
+    park = Park()
+    dog = SuperDog(program)
+    dogfood = Food()
+    water = Water()
+
+    park.add_thing(dog, 1)
+    park.add_thing(dogfood, 5)
+    park.add_thing(water, 7)
+
