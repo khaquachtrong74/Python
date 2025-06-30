@@ -24,9 +24,9 @@ class Thing:
         print("Some thing I don't ever heared before")
     def display(self, canvas, x, y, width, height):
         pass
-class Food():
+class Food(Thing):
     pass
-class Water():
+class Water(Thing):
     pass
 
 # Agent là một lớp con của Thing
@@ -72,7 +72,7 @@ def program(percepts):
             return 'eat'
         elif isinstance(p, Water):
             return 'drink'
-    return 'move down'
+    return 'movedown'
 
 
 
@@ -187,28 +187,25 @@ class Park(Environment):
         return things
     @override
     def execute_action(self, agent, action):
-        if action == 'move_down':
-            agent.move_down()
+        if action == 'movedown':
+            agent.movedown()
             print("BlindDog at: {}".format(agent.location))
-        if action == 'eat':
-            things = percept(agent)
-            agent.eat(this)
+        elif  action == 'eat':
+            thing = self.list_things_at(agent.location, Food)
+            agent.eat(thing[0])
+            self.delete_thing(thing[0])
+            print("SupperDog eat")
         elif action == 'drink':
-            agent.drink()
+            thing = self.list_things_at(agent.location, Water)
+            agent.drink(thing[0])
+            self.delete_thing(thing[0])
+            print("SupperDog drink")
 
+    @override
+    def is_done(self):
+        return super().is_done() or not any(isinstance(thing, Food) or isinstance(thing,Water) for thing in self.things)
 if __name__ == '__main__':
-   """
-    t = Thing()
-    a = Agent()
-    print(repr(t))
-    print(t.is_alive())
-    t.show_state()
-    print(repr(a))
-    print("TEST SUPPER DOG________________")
-    dogfood = Food()
-    wate = Water()
-    aka_dog = SuperDog(program)
-    print(aka_dog.program)"""
+   
     park = Park()
     dog = SuperDog(program)
     dogfood = Food()
@@ -217,4 +214,5 @@ if __name__ == '__main__':
     park.add_thing(dog, 1)
     park.add_thing(dogfood, 5)
     park.add_thing(water, 7)
+    park.run(8)
 
