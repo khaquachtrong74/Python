@@ -38,7 +38,7 @@ export const Input = ({placeHolder,  type='text', isRequired=false, inputValue="
     />
 );
 export const Button = ({id, buttonQuote, buttonOnClick, className}:ButtonProps) =>(
-    <button id={id} onClick={buttonOnClick} className={`text-white p-3 rounded-md bg-gray-600 button-hover ${className}`}>
+    <button id={id} onClick={buttonOnClick} className={`p-3 rounded-md  ${className}`}>
         {buttonQuote}
     </button>
 )
