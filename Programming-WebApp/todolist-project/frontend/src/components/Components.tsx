@@ -10,10 +10,13 @@ type InputProps = {
         isRequired?: boolean,
         inputValue?: string,
         onChange?: (event : React.ChangeEvent<HTMLInputElement>) => void,
+        className?: string,
     } ;
 type ButtonProps = {
+    id?: string,
     buttonQuote : string,
     buttonOnClick?:(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>void,
+    className?: string
 }
 type Title = {
     title : string
@@ -23,25 +26,26 @@ export const Label = ({labelName, isRequired}:LabelProps) =>(
         {labelName}{isRequired && <span className='text-red-500'> * </span>} 
     </label>
 )
-export const Input = ({placeHolder,  type='text', isRequired=false, inputValue="", onChange = () =>{}} : InputProps) =>(
+export const Input = ({placeHolder,  type='text', isRequired=false, inputValue="", onChange = () =>{}, className} : InputProps) =>(
     <input 
         type={type} 
         placeholder={placeHolder} 
         required={isRequired}
         value={inputValue}
         onChange={onChange}
-        className='px-3 py-2 border border-gray-300 rounded-md'
+
+        className={`{px-3 py-2 border border-gray-300 rounded-md ${className}`}
     />
 );
-export const Button = ({buttonQuote, buttonOnClick}:ButtonProps) =>(
-    <button onClick={buttonOnClick} className="text-white p-3 rounded-md ml-4 bg-gray-600 button-hover">
+export const Button = ({id, buttonQuote, buttonOnClick, className}:ButtonProps) =>(
+    <button id={id} onClick={buttonOnClick} className={`text-white p-3 rounded-md bg-gray-600 button-hover ${className}`}>
         {buttonQuote}
     </button>
 )
 
-export function Container({children}){ 
+export function Container({children, className}:{children:React.ReactNode , className?:string}){ 
     return(
-        <div className="flex flex-row  items-center mt-6 mb-8  w-full">
+        <div className={`flex flex-row  items-center mt-6 mb-8  w-full ${className}`}>
             {/* Đặt các componnet vào đây */}
             {children}
         </div>

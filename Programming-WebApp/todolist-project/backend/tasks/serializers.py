@@ -5,6 +5,7 @@ class TaskListSerializers(serializers.ModelSerializer):
     class Meta:
         model = Task
         fields = [
+            'id',
             'description_task',
             "time_start",
         ]
