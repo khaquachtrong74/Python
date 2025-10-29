@@ -20,12 +20,12 @@ class Course(BaseModel):
     subject = models.CharField(max_length=100)
     description = models.TextField()
     active = models.BooleanField(default=True)
-    category_id = models.ForeignKey(Category, on_delete=models.RESTRICT)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
 class Lesson(BaseModel):
     subject = models.CharField(max_length=255)
     content = models.TextField()
-    image = models.ImageField(upload_to='application/%Y/%m', null=True)
-    course_id = models.ForeignKey(Course, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='lessons/%Y/%m', null=True)
+    course = models.ForeignKey(Course, on_delete=models.RESTRICT)
     active = models.BooleanField(default=True)
 
