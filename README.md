@@ -1,2 +1,8 @@
 # Python
-My learning python and do something cool!
+Learn
+- Flask
+- Django
+- Django Framework
+- Transformer
+- Bert
+- Seq2Seq
